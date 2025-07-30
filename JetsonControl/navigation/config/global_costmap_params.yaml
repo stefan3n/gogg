@@ -1,0 +1,10 @@
+global_costmap:
+  global_frame: map
+  robot_base_frame: base_link
+  update_frequency: 5
+  publish_frequency: 5
+  resolution: 0.01
+
+  plugins:
+    - {name: static,                  type: "costmap_2d::StaticLayer"}
+    - {name: inflation,               type: "costmap_2d::InflationLayer"}

@@ -1,0 +1,5 @@
+### [< back](../GuideForDocumentation.md)
+# Serial Communication
+## We have used the pyserial module for python. To install it run the command: ```pip3 install pyserial```. We have written out own class around the module with the methods that we believed to be important such as send, receive, close. The main code calls receive/send which are blocking methods. The arduino code calls its own receive/send (only send is blocking).
+## We transfer messages by first sending ```<``` which denotes the beginning of a message. Then each number is sent as a string, one digit at a time, followed by ```,```. The message is ended by ```>```.
+## You should use our class/functions for the serial communication because it can be frustrating. There is not much information online about it and how it works in detail. We have spent ~2-3 weeks "perfecting" the functions used and even now there are a few this we do not understand. Also the serial communication will fail if the serial monitor from arduino IDE is open.

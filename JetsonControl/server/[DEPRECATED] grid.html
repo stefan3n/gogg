@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <canvas id="canvas" width="420px" height="420px"></canvas>
+    </div>
+    
+    <script>
+
+        function lineToAngle(ctx, x1, y1, length, angle) {
+        angle = (angle - 90) * Math.PI / 180;
+        var x2 = x1 + length * Math.cos(angle),
+            y2 = y1 + length * Math.sin(angle);
+
+        ctx.beginPath();
+	ctx.strokeStyle = "red";
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.fill();
+
+        return {
+            x: x2,
+            y: y2
+        };
+        }
+
+        function draw_arrow(ctx, x1, y1, length, angle) {
+        var pos = lineToAngle(ctx, x1, y1, length, angle);
+        lineToAngle(ctx, pos.x, pos.y, 10, angle - 135);
+        lineToAngle(ctx, pos.x, pos.y, 10, angle + 135);
+        }
+        
+        // Get the canvas element
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Grid properties
+        var rows = 100;
+        var cols = 100;
+        const cellSize = 2;
+
+        // Array to store colors for each square
+        var map = [];
+
+        // Initialize colors array
+        for (let i = 0; i < rows * cols; i++) {
+            map.push(`rgb:(255, 0, 0)`);
+        }
+
+        function global2PixelCoords(globalX, globalY, originX, originY)
+        {
+            pixelX = Math.round(globalX - originX);
+            pixelY = Math.round(globalY - originY);
+
+            return {x: pixelX, y: pixelY};
+        }
+
+        // Function to draw the grid
+        function drawGrid(rows, cols, cellSize) {
+            const width = cols * cellSize;
+            const height = rows * cellSize;
+            canvas.width = width;
+            canvas.height = height;
+
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw filled squares
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                const colorIndex = i * cols + j;
+
+                if(map[colorIndex] < 0)
+                {
+                    ctx.fillStyle = '#7F8A82'; //grey
+                }
+                else if(map[colorIndex] == 0)
+                {
+                    ctx.fillStyle = '#FFFFFF'; //white
+                }
+                else
+                {
+                    ctx.fillStyle = '#000000'; //black
+                }
+                
+                ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                }
+            }
+	console.log("hellp");
+        }
+	drawGrid(rows, cols, cellSize);
+
+        setInterval(async () => {
+            var host = window.location.host;
+            var response = await fetch("http://" + host + "/get_map", {method: "POST"});
+            var json = await response.json();
+
+
+            if(json.mapData != null && json.pose != null)
+            {
+                map = json.mapData.map;
+                cols = json.mapData.width;
+                rows = json.mapData.height;
+                drawGrid(rows, cols, cellSize);
+
+                originX = json.mapData.originX;
+                originY = json.mapData.originY;
+		originHeading = json.mapData.originHeading;
+                resolution = json.mapData.resolution;
+
+                carX = json.pose[0];
+                carY = json.pose[1];
+                carHeading = (json.pose[2] + originHeading) * 180 / Math.PI;
+                
+
+                arrowOrigin = global2PixelCoords(carX, carY, originX, originY);
+		arrowOrigin.x /= resolution;
+		arrowOrigin.y /= resolution;
+
+		var aux = arrowOrigin.x;
+
+		arrowOrigin.x = arrowOrigin.y;
+		arrowOrigin.y = cols * cellSize - aux;
+
+		console.log(originHeading);
+                console.log(arrowOrigin.x);
+                console.log(arrowOrigin.y);
+                console.log(carHeading);
+                console.log('\n');
+		draw_arrow(ctx, arrowOrigin.x, arrowOrigin.y, 20, carHeading);
+            }
+
+        }, 1500);
+
+    </script>
+</body>
+</html>
