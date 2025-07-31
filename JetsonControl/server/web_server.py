@@ -1,9 +1,13 @@
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, Response
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
-import cv2
-from flask import Response
+import threading
+import atexit
+from camera_utils import generate_frames, cleanup
+
+CAR_CAMERA_NAME = "usb-046d_0825_5AA5590-video-index0"
+ARM_CAMERA_NAME = "usb-046d_HD_Webcam_C525_02CCCB50-video-index0"
 
 app = Flask(__name__, static_folder='.')
 
@@ -51,29 +55,16 @@ ros_thread.start()
 def index():
     return send_from_directory('.', 'index.html')
 
-def gen_frames(camera_id):
-    cap = cv2.VideoCapture(camera_id)
-    print(f"[Flask] Starting video capture for camera {camera_id}")
-    while True:
-        success, frame = cap.read()
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
 @app.route('/car_camera_feed')
 def car_video_feed():
     print("[Flask] Serving car video feed")
-    return Response(gen_frames(0),
+    return Response(generate_frames(CAR_CAMERA_NAME),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
     
 @app.route('/arm_camera_feed')
 def arm_video_feed():
     print("[Flask] Serving arm video feed")
-    return Response(gen_frames(1),
+    return Response(generate_frames(ARM_CAMERA_NAME),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/<path:path>')
@@ -141,6 +132,8 @@ def catch_all_commands(cmd):
     except Exception as e:
         print(f"[Flask] ERROR at publish: {e}")
     return {'status': 'OK'}
+
+atexit.register(cleanup)
 
 def run_server():
     app.run(host='0.0.0.0', port=8080)

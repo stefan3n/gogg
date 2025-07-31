@@ -124,12 +124,10 @@ function toggleMode() {
     const manualLabel = document.getElementById('manual-label');
     const selfLabel = document.getElementById('self-label');
     if (slider.checked) {
-        setMode('self_driving');
         selfDriving();
         manualLabel.classList.remove('slider-label-active');
         selfLabel.classList.add('slider-label-active');
     } else {
-        setMode('manual');
         manualMode();
         selfLabel.classList.remove('slider-label-active');
         manualLabel.classList.add('slider-label-active');
