@@ -107,7 +107,7 @@ function exit()
 function selfDriving()
 {
     var host = window.location.host;
-    fetch("http://" + host + "/autonomous", {method: "POST"});
+    fetch("http://" + host + "/selfDriving", {method: "POST"});
 }
 
 function manualMode()

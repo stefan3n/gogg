@@ -5,201 +5,140 @@
     <title>Car control</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <table width="1000px" height="500px">
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button onclick="sendStart()" style="flex:1;" class="button">Start</button>
-                <button onclick="sendEmergency()" style="flex:1;" class="button">Emergency</button>
-                <button onclick="sendEndEmergency()" style="flex:1;" class="button">End emergency</button>
+    <div class="Title">
+        <h1>Car Control Interface</h1>
+    </div>
 
-                <button onclick="moveOne()" style="flex:1;" class="button">Move one</button>
-                <button onclick="moveBoth()" style="flex:1;" class="button">Move both</button>
-                <button onclick="exit()" style="flex:1;" class="button">EXIT</button>
-            </td>
-        </tr>
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button onmousedown="sendForward()" onmouseup="sendBreak()" style="flex:1;" class="button">Forward</button>
-                
-                <button onclick="initialPos()" style="flex:1;" class="button">Initial position robot</button>
-            </td>
-        </tr>
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button onmousedown="sendTurnLeft()" onmouseup="sendBreak()" style="flex:1;" class="button">Turn left</button>
-                <button onmousedown="sendBackward()" onmouseup="sendBreak()" style="flex:1;" class="button">Backward</button>
-                <button onmousedown="sendTurnRight()" onmouseup="sendBreak()" style="flex:1;" class="button">Turn right</button>
-                
-                <button onclick="stopRobot()" style="flex:1;" class="button">Stop robot</button>
-                <button onclick="rotateLeft()" style="flex:1;" class="button">Rotate left</button>
-                <button onclick="rotateRight()" style="flex:1;" class="button">Rotate right</button>
-            </td>
-        </tr>
-    </table>
-
-    <br/>
-    <table width="1000px" height="200px">
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button onclick="calLeft()" style="flex:1;" class="button">Cal left</button>
-                <button onclick="calRight()" style="flex:1;" class="button">Cal right</button>
-            </td>
-        </tr>
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button onclick="clawRotate()" style="flex:1;" class="button">Claw rotate</button>
-            </td>
-        </tr>
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button onclick="clawOpen()" style="flex:1;" class="button">Claw open</button>
-                <button onclick="clawClose()" style="flex:1;" class="button">Claw close</button>
-            </td>
-        </tr>
-    </table>
-
-    <label for="pwmValue">PWM</label>
-    <input type="number" id="pwm" name="pwm" min="0" max="255" value="0" style="height:50px;"> 
-
-    <label for="stepsValue">STEPS</label>
-    <input type="number" id="steps" name="steps" min="0" max="255" value="0" style="height:30px;"> 
-
-    <label for="degrees">DEGREES</label>
-    <input type="number" id="degrees" name="degrees" min="0" max="255" value="0" style="height:30px;"> 
-    
-    <label for="actuator">ACTUATOR</label>
-    <select id="actuator" name="actuator" style="height:30px;">
-        <option value="1">1</option>
-        <option value="2">2</option>
-    </select>
-    
-    <label for="distancevalue1">distance1</label>
-    <input type="number" id="distance1" name="distance" min="0" max="255" value="0" style="height:30px;"> 
-
-    <label for="distancevalue2">distance2</label>
-    <input type="number" id="distance2" name="distance" min="0" max="255" value="0" style="height:30px;"> 
-
-    <table width="1000px" height="500px">
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button ontouchstart = "sendStart()" style="flex:1;" class="button">Start</button>
-                <button ontouchstart = "sendEmergency()" style="flex:1;" class="button">Emergency</button>
-                <button ontouchstart = "sendEndEmergency()" style="flex:1;" class="button">End emergency</button>
-
-                <button ontouchstart = "moveOne()" style="flex:1;" class="button">Move one</button>
-                <button ontouchstart = "moveBoth()" style="flex:1;" class="button">Move both</button>
-                <button ontouchstart = "exit()" style="flex:1;" class="button">EXIT</button>
-            </td>
-        </tr>
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button ontouchstart = "sendForward()" ontouchend ="sendBreak()" style="flex:1;" class="button">Forward</button>
-                
-                <button ontouchstart = "initialPos()" style="flex:1;" class="button">Initial position robot</button>
-            </td>
-        </tr>
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button ontouchstart = "sendTurnLeft()" ontouchend ="sendBreak()" style="flex:1;" class="button">Turn left</button>
-                <button ontouchstart = "sendBackward()" ontouchend ="sendBreak()" style="flex:1;" class="button">Backward</button>
-                <button ontouchstart = "sendTurnRight()" ontouchend ="sendBreak()" style="flex:1;" class="button">Turn right</button>
-                
-                <button ontouchstart = "stopRobot()" style="flex:1;" class="button">Stop robot</button>
-                <button ontouchstart = "rotateLeft()" style="flex:1;" class="button">Rotate left</button>
-                <button ontouchstart = "rotateRight()" style="flex:1;" class="button">Rotate right</button>
-            </td>
-        </tr>
-    </table>
-
-    <br/>
-
-    <table width="1000px" height="200px">
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button ontouchstart = "calLeft()" style="flex:1;" class="button">Cal left</button>
-                <button ontouchstart = "calRight()" style="flex:1;" class="button">Cal right</button>
-            </td>
-        </tr>
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button ontouchstart = "clawRotate()" style="flex:1;" class="button">Claw rotate</button>
-            </td>
-        </tr>
-        <tr style="height:33%;">
-            <td style="display: flex;height:100%;">
-                <button ontouchstart = "clawOpen()" style="flex:1;" class="button">Claw open</button>
-                <button ontouchstart = "clawClose()" style="flex:1;" class="button">Claw close</button>
-            </td>
-        </tr>
-    </table>
-
-    <br/>
+    <div class="control-mode">
+        <div class="mode-title">Control Mode:</div>
+        <div class="slider-container">
+            <span id="manual-label" class="slider-label slider-label-active">Manual</span>
+            <label class="switch">
+                <input type="checkbox" id="modeSlider" onchange="toggleMode()">
+                <span class="slider round"></span>
+            </label>
+            <span id="self-label" class="slider-label">Self Driving</span>
+        </div>
+    </div>
 
 
-    <button onclick="selfDriving()" style="flex:1;" class="button">Self driving click</button> 
-    <button ontouchstart ="selfDriving()" style="flex:1;" class="button">Self driving touch</button>
-    <br/>
-    <button onclick="manualMode()" style="flex:1;" class="button">Manual mode click</button> 
-    <button ontouchstart ="manualMode()" style="flex:1;" class="button">Manual mode touch</button>
+    <div class="main-container">
+        <div class="dpad-fullwidth">
+            <div class="dpad-container dpad-center">
+                <div class="dpad-title">Control car:</div>
+                <table class="dpad-table">
+                    <tr>
+                        <td></td>
+                        <td style="text-align: center;">
+                            <button onmousedown="sendForward()" onmouseup="sendBreak()" class="button dpad-btn">&#8593;<div class="dpad-label">Forward</div></button>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            <button onmousedown="sendTurnLeft()" onmouseup="sendBreak()" class="button dpad-btn">&#8592;<div class="dpad-label">Turn Left</div></button>
+                        </td>
+                        <td></td>
+                        <td style="text-align: center;">
+                            <button onmousedown="sendTurnRight()" onmouseup="sendBreak()" class="button dpad-btn">&#8594;<div class="dpad-label">Turn Right</div></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: center;">
+                            <button onmousedown="sendBackward()" onmouseup="sendBreak()" class="button dpad-btn">&#8595;<div class="dpad-label">Backward</div></button>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
-    <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>  
-    <script>
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        var time = 0;
-        var data = [['Time', 'TargetVelocity', 'Actual Velocity'],
-            [0, 0, 0]];
-        const MAX_DATA_POINTS = 50;
-        const TIME_INTERVAL = 50;
-        /*setInterval(async function(){
-            time = time + TIME_INTERVAL;
-            var host = window.location.host;
-            response = await fetch("http://" + host + '/wheelSpeeds', {method: "POST"});
-            print(JSON.parse(response.body));
-            data.push([time/1000, Math.random() * 10, 10]);
-            if(data.length > MAX_DATA_POINTS+1)
-            {
-                data.splice(1, 1);
-            }
-            drawChart();
-        }, TIME_INTERVAL);*/
-
-        function drawChart() {
-            var table = google.visualization.arrayToDataTable(data);
-
-            var options = {
-                title: 'Company Performance',
-                curveType: 'function',
-                legend: { position: 'bottom' }
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-            chart.draw(table, options);
-        }
-    </script>
-    <div id="chart_div"></div> -->
-
-    <h1>Robot Camera</h1>
-    <img id="videoStream1" alt="Video feed unavailable" style="width:50%; height:auto; border: 2px solid #000; margin-top: 20px;">
-    <script type="text/javascript">
-        var host = window.location.hostname;
-        var videoStreamUrl = "http://" + host + ":8081/video_feed";
-        document.getElementById("videoStream1").src = videoStreamUrl;
-    </script>
-
-
-    <h1>Car Camera</h1>
-    <img id="videoStream2" alt="Video feed unavailable" style="width:50%; height:auto; border: 2px solid #000; margin-top: 20px;">
-    <script type="text/javascript">
-        var host = window.location.hostname;
-        var videoStreamUrl = "http://" + host + ":8082/video_feed";
-        document.getElementById("videoStream2").src = videoStreamUrl;
-    </script>
-
+        <div class="section-title">Parameters</div>
+        <div class="input-fields">
+            <label for="pwmValue">PWM</label>
+            <input type="number" id="pwm" name="pwm" min="0" max="255" value="0" class="input-pwm"> 
+            <!--<label for="stepsValue">STEPS</label>
+            <input type="number" id="steps" name="steps" min="0" max="255" value="0" class="input-steps"> 
+            <label for="degrees">DEGREES</label>
+            <input type="number" id="degrees" name="degrees" min="0" max="255" value="0" class="input-degrees"> 
+            <label for="actuator">ACTUATOR</label>
+            <select id="actuator" name="actuator" class="input-actuator">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+            <label for="distancevalue1">distance1</label>
+            <input type="number" id="distance1" name="distance" min="0" max="255" value="0" class="input-distance"> 
+            <label for="distancevalue2">distance2</label>
+            <input type="number" id="distance2" name="distance" min="0" max="255" value="0" class="input-distance"> -->
+        </div>
+        
+        <div class="main-controls-group">
+            <div class="main-controls-row">
+                <button onclick="sendStart()" class="button flex1">Start</button>
+                <button onclick="stopRobot()" class="button flex1">Stop robot</button>
+            </div>
+            <div class="main-controls-row">
+                <button onclick="sendEmergency()" class="button flex1">Emergency</button>
+                <button onclick="sendEndEmergency()" class="button flex1">End emergency</button>
+            </div>
+            <div class="main-controls-row">
+                <button onclick="moveOne()" class="button flex1">Move one</button>
+                <button onclick="moveBoth()" class="button flex1">Move both</button>
+            </div>
+            <div class="main-controls-row">
+                <button onclick="rotateLeft()" class="button flex1">Rotate left</button>
+                <button onclick="rotateRight()" class="button flex1">Rotate right</button>
+            </div>
+            <div class="main-controls-row">
+                <button onclick="clawOpen()" class="button flex1">Claw open</button>
+             <button onclick="clawClose()" class="button flex1">Claw close</button>
+            </div>
+            <div class="main-controls-row">
+                <button onclick="initialPos()" class="button flex1">Initial position robot</button>
+                <button onclick="exit()" class="button flex1">EXIT</button>
+            </div>
+        </div>
+        
+        <div class="section-title">Cameras</div>
+        <div class="camera-section">
+            <div class="camera-block">
+                <div class="camera-title">Car Camera</div>
+                <img src="/car_camera_feed" width="320" height="240">
+            </div>
+            <div class="camera-block">
+                <div class="camera-title">Arm Camera</div>
+                <img src="/arm_camera_feed" width="320" height="240">
+            </div>
+        </div>
+    </div>
 </body>
 
 <script src="commands.js"></script>
+<script>
+// Slider mode logic
+function toggleMode() {
+    const slider = document.getElementById('modeSlider');
+    const manualLabel = document.getElementById('manual-label');
+    const selfLabel = document.getElementById('self-label');
+    if (slider.checked) {
+        setMode('self_driving');
+        selfDriving();
+        manualLabel.classList.remove('slider-label-active');
+        selfLabel.classList.add('slider-label-active');
+    } else {
+        setMode('manual');
+        manualMode();
+        selfLabel.classList.remove('slider-label-active');
+        manualLabel.classList.add('slider-label-active');
+    }
+}
+window.onload = function() {
+    document.getElementById('modeSlider').checked = false;
+    document.getElementById('manual-label').classList.add('slider-label-active');
+    document.getElementById('self-label').classList.remove('slider-label-active');
+};
+</script>
 </html>
