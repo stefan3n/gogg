@@ -294,6 +294,30 @@ body {
     transform: scale(0.98);
 }
 
+/* Start and Initial position robot buttons */
+button[onclick="sendStart()"],
+button[onclick="initialPos()"] {
+    background: linear-gradient(90deg, #28a745 0%, #218838 100%);
+}
+
+/* Stop robot, Emergency, and Exit buttons */
+button[onclick="stopRobot()"],
+button[onclick="sendEmergency()"],
+button[onclick="exit()"] {
+    background: linear-gradient(90deg, #dc3545 0%, #c82333 100%);
+}
+
+/* All other buttons */
+button[onclick="sendEndEmergency()"],
+button[onclick="moveOne()"],
+button[onclick="moveBoth()"],
+button[onclick="rotateLeft()"],
+button[onclick="rotateRight()"],
+button[onclick="clawOpen()"],
+button[onclick="clawClose()"] {
+    background: linear-gradient(90deg, #4f8cff 0%, #1cb5e0 100%);
+}
+
 table {
     width: 100%;
     max-width: 1000px;

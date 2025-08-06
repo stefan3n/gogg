@@ -1,0 +1,54 @@
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+import serial
+import threading
+import logging
+
+# Set up logger for Arduino commands and responses 
+arduino_logger = logging.getLogger("arduino_commands")
+arduino_logger.setLevel(logging.INFO)
+file_handler = logging.FileHandler("arduino_commands.log")
+formatter = logging.Formatter('%(asctime)s - %(message)s')
+file_handler.setFormatter(formatter)
+if not arduino_logger.hasHandlers():
+    arduino_logger.addHandler(file_handler)
+
+class ArduinoArmReaderNode(Node):
+    def __init__(self):
+        super().__init__('arduino_arm_reader_node')
+        self.ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)  # Adjust the port and baudrate as needed
+        self.get_logger().info('Serial reader connected to Arduino.')
+        self.publisher = self.create_publisher(
+            String, 
+            'arm_response_topic',
+            10
+        )
+        self.running = True
+        self.thread = threading.Thread(target=self.read_serial)
+        self.thread.daemon = True
+        self.thread.start()
+
+    def read_serial(self):
+        while self.running:
+            if self.ser.in_waiting > 0:
+                response = self.ser.readline().decode().strip()
+                if response:
+                    msg = String()
+                    msg.data = response
+                    self.publisher.publish(msg)
+                    # Log the response from Arduino
+                    arduino_logger.info(f"RESPONSE FROM ARDUINO: {response}")
+                    self.get_logger().info(f'Received from Arduino: {response}')
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = ArduinoArmReaderNode()
+    try:
+        rclpy.spin(node)
+    finally:
+        node.running = False
+        node.destroy_node()
+
+if __name__ == '__main__':
+    main()

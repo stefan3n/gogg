@@ -26,7 +26,9 @@ class Camera:
         print(f"[GStreamer] Initializing camera '{camera_name}' with: {self.gst_str}")
         try:
             self.cap = cv2.VideoCapture(self.gst_str, cv2.CAP_GSTREAMER)
-            if not self.cap.isOpened():
+            if self.cap.isOpened():
+                print(f"[Camera] '{camera_name}' opened with GStreamer pipeline.")
+            else:
                 raise Exception("Failed to open with GStreamer")
         except Exception as e:
             print(f"[GStreamer] ERROR: {e}")
@@ -36,6 +38,10 @@ class Camera:
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
             self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+            if self.cap.isOpened():
+                print(f"[Camera] '{camera_name}' opened with standard OpenCV capture.")
+            else:
+                print(f"[Camera] ERROR: '{camera_name}' could not be opened with fallback either.")
 
     @staticmethod
     def find_video_device_by_name(name):

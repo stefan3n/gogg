@@ -6,7 +6,7 @@ import threading
 import atexit
 from camera_utils import generate_frames, cleanup
 
-CAR_CAMERA_NAME = "usb-046d_0825_5AA5590-video-index0"
+CAR_CAMERA_NAME = "usb-046d_0825_5AA55590-video-index0"
 ARM_CAMERA_NAME = "usb-046d_HD_Webcam_C525_02CCCB50-video-index0"
 
 app = Flask(__name__, static_folder='.')
@@ -123,6 +123,43 @@ def catch_command_turn_right(pwm_value):
         print(f"[Flask] ERROR at publish: {e}")
     return {'status': 'OK'}
 
+@app.route('/break', methods=['POST'])
+def catch_command_break():
+    try:
+        msg = f"<0, 3>"
+        ros2_node.publish(msg, "wheels_command_topic")
+    except Exception as e:
+        print(f"[Flask] ERROR at publish: {e}")
+    return {'status': 'OK'}
+
+@app.route('/start', methods=['POST'])
+def catch_command_start():
+    try:
+        msg = f"<0, 1>"
+        ros2_node.publish(msg, "wheels_command_topic")
+    except Exception as e:
+        print(f"[Flask] ERROR at publish: {e}")
+    return {'status': 'OK'}
+
+@app.route('/emergency', methods=['POST'])
+def catch_command_emergency():
+    try:
+        msg = f"<0, 4>"
+        ros2_node.publish(msg, "wheels_command_topic")
+    except Exception as e:
+        print(f"[Flask] ERROR at publish: {e}")
+    return {'status': 'OK'}
+
+@app.route('/endEmergency', methods=['POST'])
+def catch_command_end_emergency():
+    try:
+        msg = f"<0, 5>"
+        ros2_node.publish(msg, "wheels_command_topic")
+    except Exception as e:
+        print(f"[Flask] ERROR at publish: {e}")
+    return {'status': 'OK'}
+
+
 @app.route('/<path:cmd>', methods=['POST'])
 def catch_all_commands(cmd):
     print(f"[Flask] Received POST /{cmd}")
@@ -137,8 +174,28 @@ atexit.register(cleanup)
 
 def run_server():
     app.run(host='0.0.0.0', port=8080)
+    
+import signal
+import sys
+
+def shutdown_server(signal_received, frame):
+    """Handle shutdown signals like Ctrl+C."""
+    print("\n[Shutdown] Signal received. Cleaning up...")
+    try:
+        cleanup()  # Cleanup camera resources
+        ros2_executor.shutdown()  # Shutdown ROS2 executor
+        rclpy.shutdown()  # Shutdown ROS2
+        print("[Shutdown] Resources cleaned up. Exiting.")
+    except Exception as e:
+        print(f"[Shutdown] Error during cleanup: {e}")
+    sys.exit(0)
+
+# Register the signal handler for SIGINT (Ctrl+C)
+signal.signal(signal.SIGINT, shutdown_server)
 
 if __name__ == '__main__':
     run_server()
+    
+    
     
 

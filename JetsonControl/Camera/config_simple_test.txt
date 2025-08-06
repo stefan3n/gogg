@@ -1,0 +1,21 @@
+[property]
+gpu-id=0
+# Use a simple, reliable model for testing
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+model-file=/opt/nvidia/deepstream/deepstream/samples/models/Primary_Detector/resnet10.caffemodel
+proto-file=/opt/nvidia/deepstream/deepstream/samples/models/Primary_Detector/resnet10.prototxt
+model-engine-file=resnet10.engine
+labelfile-path=/opt/nvidia/deepstream/deepstream/samples/models/Primary_Detector/labels.txt
+batch-size=1
+network-mode=0
+num-detected-classes=4
+interval=0
+gie-unique-id=1
+network-type=0
+cluster-mode=2
+maintain-aspect-ratio=1
+
+[class-attrs-all]
+nms-iou-threshold=0.3
+pre-cluster-threshold=0.2

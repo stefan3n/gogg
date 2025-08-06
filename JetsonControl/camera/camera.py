@@ -12,8 +12,8 @@ import cv2
 import traceback
 
 # Our modules
-from help.help import sendSIGINT
-from camera.help_camera import predict, predict_and_detect, track_and_detect
+from JetsonControl.help.help import sendSIGINT
+from JetsonControl.camera.help_camera import predict, predict_and_detect, track_and_detect
 
 
 #   Both cameras:
@@ -63,7 +63,6 @@ class Camera:
         try:
             self.logger.info("Starting YOLOv10n.")
             self.model = YOLO("../aiModels/yolov10b_trained.pt")
-            #self.model.to('cuda')
             self.logger.info("Started YOLOV10n.")
         except KeyboardInterrupt:
             self.logger.error("Received SIGINT.")
@@ -188,4 +187,38 @@ class Camera:
         '''
         PidList getter.\n
         '''
-        return self.pidList 
+        return self.pidList
+
+if __name__ == "__main__":
+    import logging
+    import multiprocessing
+    
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger("CameraLogger")
+
+    # Create a pipe for communication
+    parent_conn, child_conn = multiprocessing.Pipe()
+
+    # Create a dummy matrices class to simulate
+    class Matrices:
+        def load(self):
+            logger.info("Matrices loaded.")
+
+    matrices = Matrices()
+
+    # Create a Camera instance
+    camera = Camera(draw=True, pipe=child_conn, logger=logger, matrices=matrices)
+
+    # Set up the camera
+    try:
+        camera.setup(cv=cv2.CAP_V4L2, name="/dev/video0")
+        logger.info("Camera setup complete.")
+
+        # Run main loop
+        while True:
+            camera.loop()
+    except KeyboardInterrupt:
+        logger.info("Program interrupted by user.")
+    finally:
+        camera.close()
+        logger.info("Camera closed.")
